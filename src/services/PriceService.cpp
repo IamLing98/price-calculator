@@ -223,7 +223,7 @@ void *saveToRedis(string key, string data) {
 //                           std::back_inserter(hash_tag_res));
 
     } catch (const Error &e) {
-        cerr<<"Error when redis connect"<<e.what()<<endl;
+        cerr << "Error when redis connect" << e.what() << endl;
         // Error handling.
     }
 }
@@ -233,6 +233,7 @@ void *sendToRedis(string key, string data) {
     // ***** STRING commands *****=
     redis.set(key, data);
 }
+
 bool running = true;
 
 void *PriceService::init() {
@@ -271,7 +272,10 @@ void *PriceService::init() {
     cout << "Consuming messages from topic " << topic_name << endl;
 
     // Now read lines and write them into kafka
+    MarkPrice *markPrice;
+    AccountInfo *accountInfo;
     while (running) {
+        auto start = high_resolution_clock::now();
         // Try to consume a message
         Message msg = consumer.poll();
         if (msg) {
@@ -290,10 +294,24 @@ void *PriceService::init() {
 //                cout << msg.get_payload() << endl;
                 messageJson = json::parse(msg.get_payload());
 //                cout << messageJson["markPrices"] << endl;
-
-                saveToRedis("mark_price", msg.get_payload());
+                json markPriceJson = messageJson["markPrices"];
+                markPrice = new MarkPrice(markPriceJson);
+                accountInfo = new AccountInfo(messageJson["accountInfo"]);
+                try {
+                    sendToRedis("mark_price", msg.get_payload());
+                    sendToRedis("mark_price_map", markPrice->getPrices().dump());
+                    sendToRedis("account_info", accountInfo->toJSON().dump());
+                } catch (exception &ex) {
+                    cerr << "Error when send to redis" << ex.what() << endl;
+                }
                 // Now commit the message
                 consumer.commit(msg);
+                delete markPrice;
+                delete accountInfo;
+
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - start);
+                cout << duration.count()/1000000 << endl;
             }
         }
     }

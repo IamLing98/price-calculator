@@ -11,10 +11,12 @@ add_executable(calculator
         src/main.cpp
         src/services/PriceService.cpp
         src/services/PriceService.h
-        src/models/AccountInfo/AccountInfo.cpp
-        src/models/AccountInfo/AccountInfo.h
+        src/models/accountInfo/AccountInfo.cpp
+        src/models/accountInfo/AccountInfo.h
         src/models/markPrice/MarkPrice.cpp
         src/models/markPrice/MarkPrice.h
+        src/models/asset/Asset.cpp
+        src/models/asset/Asset.h
         )
 
 target_link_libraries(calculator CppKafka::cppkafka)

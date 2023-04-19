@@ -30,9 +30,14 @@ namespace po = boost::program_options;
 #include <nlohmann/json.hpp>
 using namespace nlohmann;
 
-#include <memory>
+#include <chrono>
+using namespace std::chrono;
 
+#include <memory>
 using namespace std;
+
+#include "../models/markPrice/MarkPrice.h"
+#include "../models/accountInfo/AccountInfo.h"
 
 class PriceService {
 private:
