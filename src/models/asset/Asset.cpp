@@ -22,6 +22,7 @@ Asset::Asset(json json) {
 }
 
 json Asset::toJSON() {
+    cout<<"Asset to JSON"<<endl;
     json json;
     json["asset"] = this->asset;
     json["walletBalance"] = this->walletBalance;
@@ -37,4 +38,5 @@ json Asset::toJSON() {
     json["availableBalance"] = this->availableBalance;
     json["marginAvailable"] = this->marginAvailable;
     json["updateTime"] = this->updateTime;
+    return json;
 }

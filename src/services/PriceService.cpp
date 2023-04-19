@@ -308,10 +308,9 @@ void *PriceService::init() {
                 consumer.commit(msg);
                 delete markPrice;
                 delete accountInfo;
-
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<microseconds>(stop - start);
-                cout << duration.count()/1000000 << endl;
+                cout << duration.count() / 1000000 << endl;
             }
         }
     }

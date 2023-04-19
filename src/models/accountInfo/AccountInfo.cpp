@@ -25,10 +25,11 @@ AccountInfo::AccountInfo(json accountInfoJson) {
     json assets = accountInfoJson["assets"];
     string usdt = "USDT";
     string busd = "BUSD";
+    cout << "Find usdt asset and busd asset" << endl;
     for (int i = 0; i < assets.size(); i++) {
         json asset = assets[i];
         if (usdt.compare(asset["asset"]) == 0) {
-            this->assetUSDT = assetUSDT;
+            this->assetUSDT = new Asset(asset);
         }
         if (busd.compare(asset["asset"]) == 0) {
             this->assetBUSD = new Asset(asset);
