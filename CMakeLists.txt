@@ -17,6 +17,10 @@ add_executable(calculator
         src/models/markPrice/MarkPrice.h
         src/models/asset/Asset.cpp
         src/models/asset/Asset.h
+        src/utils/DataUtils.cpp
+        src/utils/DataUtils.h
+        src/models/position/Position.cpp
+        src/models/position/Position.h
         )
 
 target_link_libraries(calculator CppKafka::cppkafka)

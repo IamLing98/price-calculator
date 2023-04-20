@@ -9,6 +9,7 @@ MarkPrice::MarkPrice() {
 }
 
 MarkPrice::MarkPrice(json markPriceJson) {
+    cout<<"Mark price init"<<endl;
     if (markPriceJson != NULL) {
         for (int i = 0; i < markPriceJson.size(); i++) {
             this->prices[markPriceJson[i]["s"]] = markPriceJson[i];

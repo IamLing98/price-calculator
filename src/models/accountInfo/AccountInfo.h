@@ -6,10 +6,16 @@
 #define CALCULATOR_ACCOUNTINFO_H
 
 #include <nlohmann/json.hpp>
+
 using namespace nlohmann;
 using namespace std;
 
 #include "../asset/Asset.h"
+#include "../position/Position.h"
+
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 #include <vector>
 
@@ -34,6 +40,11 @@ private:
     string maxWithdrawAmount;
     Asset *assetUSDT;
     Asset *assetBUSD;
+
+    vector<Position *> positions;
+
+    // Change here to know current wallet
+    double totalPnl;
 public:
     AccountInfo();
 

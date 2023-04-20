@@ -229,6 +229,7 @@ void *saveToRedis(string key, string data) {
 }
 
 void *sendToRedis(string key, string data) {
+    cout << "Send to redis key: " << key << endl;
     auto redis = Redis("tcp://eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81@127.0.0.1:6379/1");
     // ***** STRING commands *****=
     redis.set(key, data);
@@ -294,23 +295,26 @@ void *PriceService::init() {
 //                cout << msg.get_payload() << endl;
                 messageJson = json::parse(msg.get_payload());
 //                cout << messageJson["markPrices"] << endl;
-                json markPriceJson = messageJson["markPrices"];
-                markPrice = new MarkPrice(markPriceJson);
-                accountInfo = new AccountInfo(messageJson["accountInfo"]);
+                // Now commit the message
+                consumer.commit(msg);
                 try {
+                    json markPriceJson = messageJson["markPrices"];
+                    json accountInfoJson = messageJson["accountInfo"];
+                    cout << "Start data processing" << endl;
+                    markPrice = new MarkPrice(markPriceJson);
+                    accountInfo = new AccountInfo(accountInfoJson);
                     sendToRedis("mark_price", msg.get_payload());
                     sendToRedis("mark_price_map", markPrice->getPrices().dump());
                     sendToRedis("account_info", accountInfo->toJSON().dump());
+
                 } catch (exception &ex) {
-                    cerr << "Error when send to redis" << ex.what() << endl;
+                    cerr << "Error when send to redis: " << ex.what() << endl;
                 }
-                // Now commit the message
-                consumer.commit(msg);
                 delete markPrice;
                 delete accountInfo;
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<microseconds>(stop - start);
-                cout << duration.count() / 1000000 << endl;
+                cout << duration.count() / 1000 << endl;
             }
         }
     }

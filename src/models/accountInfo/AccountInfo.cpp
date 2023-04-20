@@ -4,7 +4,19 @@
 
 #include "AccountInfo.h"
 
+vector<Position *> getPosition(json listJson) {
+    cout << "List json" << endl;
+    vector<Position *> positions;
+    Position *position;
+    for (int i = 0; i < listJson.size(); i++) {
+        position = new Position(listJson[i]);
+        positions.push_back(position);
+    }
+    return positions;
+}
+
 AccountInfo::AccountInfo(json accountInfoJson) {
+    cout << "Prepare account info" << endl;
     this->feeTier = accountInfoJson["feeTier"];
     this->canTrade = accountInfoJson["canTrade"];
     this->canDeposit = accountInfoJson["canDeposit"];
@@ -25,7 +37,6 @@ AccountInfo::AccountInfo(json accountInfoJson) {
     json assets = accountInfoJson["assets"];
     string usdt = "USDT";
     string busd = "BUSD";
-    cout << "Find usdt asset and busd asset" << endl;
     for (int i = 0; i < assets.size(); i++) {
         json asset = assets[i];
         if (usdt.compare(asset["asset"]) == 0) {
@@ -35,30 +46,38 @@ AccountInfo::AccountInfo(json accountInfoJson) {
             this->assetBUSD = new Asset(asset);
         }
     }
+    double totalPnl = stod(this->assetUSDT->getCrossUnPnl().c_str()) + stod(this->assetBUSD->getCrossUnPnl().c_str());
+    this->totalPnl = totalPnl;
+    this->positions = getPosition(accountInfoJson["positions"]);
+}
+
+AccountInfo::AccountInfo() {
+
 }
 
 json AccountInfo::toJSON() {
-    json accountInfoJson;
-    accountInfoJson["feeTier"] = this->feeTier;
-    accountInfoJson["canTrade"] = this->canTrade;
-    accountInfoJson["canDeposit"] = this->canDeposit;
-    accountInfoJson["canWithdraw"] = this->canWithdraw;
-    accountInfoJson["updateTime"] = this->updateTime;
-    accountInfoJson["multiAssetsMargin"] = this->multiAssetsMargin;
-    accountInfoJson["totalInitialMargin"] = this->totalInitialMargin;
-    accountInfoJson["totalMaintMargin"] = this->totalMaintMargin;
-    accountInfoJson["totalWalletBalance"] = this->totalWalletBalance;
-    accountInfoJson["totalUnrealizedProfit"] = this->totalUnrealizedProfit;
-    accountInfoJson["totalMarginBalance"] = this->totalMarginBalance;
-    accountInfoJson["totalPositionInitialMargin"] = this->totalPositionInitialMargin;
-    accountInfoJson["totalOpenOrderInitialMargin"] = this->totalOpenOrderInitialMargin;
-    accountInfoJson["totalCrossWalletBalance"] = this->totalCrossWalletBalance;
-    accountInfoJson["totalCrossUnPnl"] = this->totalCrossUnPnl;
-    accountInfoJson["availableBalance"] = this->availableBalance;
-    accountInfoJson["maxWithdrawAmount"] = this->maxWithdrawAmount;
-    accountInfoJson["assetBUSD"] = this->assetBUSD->toJSON();
-    accountInfoJson["assetUSDT"] = this->assetUSDT->toJSON();
-    return accountInfoJson;
+    json result;
+    result["feeTier"] = this->feeTier;
+    result["canTrade"] = this->canTrade;
+    result["canDeposit"] = this->canDeposit;
+    result["canWithdraw"] = this->canWithdraw;
+    result["updateTime"] = this->updateTime;
+    result["multiAssetsMargin"] = this->multiAssetsMargin;
+    result["totalInitialMargin"] = this->totalInitialMargin;
+    result["totalMaintMargin"] = this->totalMaintMargin;
+    result["totalWalletBalance"] = this->totalWalletBalance;
+    result["totalUnrealizedProfit"] = this->totalUnrealizedProfit;
+    result["totalMarginBalance"] = this->totalMarginBalance;
+    result["totalPositionInitialMargin"] = this->totalPositionInitialMargin;
+    result["totalOpenOrderInitialMargin"] = this->totalOpenOrderInitialMargin;
+    result["totalCrossWalletBalance"] = this->totalCrossWalletBalance;
+    result["totalCrossUnPnl"] = this->totalCrossUnPnl;
+    result["availableBalance"] = this->availableBalance;
+    result["maxWithdrawAmount"] = this->maxWithdrawAmount;
+    result["totalPnl"] = this->totalPnl;
+    result["assetBUSD"] = this->assetBUSD->toJSON();
+    result["assetUSDT"] = this->assetUSDT->toJSON();
+    return result;
 }
 
 double AccountInfo::getFeeTier() const {
