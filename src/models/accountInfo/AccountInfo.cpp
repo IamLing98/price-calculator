@@ -77,7 +77,13 @@ json AccountInfo::toJSON() {
     result["totalPnl"] = this->totalPnl;
     result["assetBUSD"] = this->assetBUSD->toJSON();
     result["assetUSDT"] = this->assetUSDT->toJSON();
+    json j_array = {};
+    for (int i = 0; i < positions.size(); i++) {
+        j_array.push_back(positions[i]->toJson());
+    }
+    result["positions"] = j_array;
     return result;
+
 }
 
 double AccountInfo::getFeeTier() const {

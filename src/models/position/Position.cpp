@@ -33,6 +33,28 @@ Position::Position(json input) {
     }
 }
 
+json Position::toJson() {
+    json result;
+    result["symbol"] = this->symbol;
+    result["initialMargin"] = this->initialMargin;
+    result["maintMargin"] = this->maintMargin;
+    result["unrealizedProfit"] = this->unrealizedProfit;
+    result["positionInitialMargin"] = this->positionInitialMargin;
+    result["openOrderInitialMargin"] = this->openOrderInitialMargin;
+    result["leverage"] = this->leverage;
+    result["isolated"] = this->isolated;
+    result["entryPrice"] = this->entryPrice;
+    result["maxNotional"] = this->maxNotional;
+    result["positionSide"] = this->positionSide;
+    result["positionAmt"] = this->positionAmt;
+    result["notional"] = this->notional;
+    result["isolatedWallet"] = this->isolatedWallet;
+    result["updateTime"] = this->updateTime;
+    result["bidNotional"] = this->bidNotional;
+    result["askNotional"] = this->askNotional;
+    return result;
+};
+
 const string &Position::getSymbol() const {
     return symbol;
 }

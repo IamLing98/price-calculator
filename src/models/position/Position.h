@@ -34,6 +34,8 @@ public:
     Position();
     Position(json json);
 
+    json toJson();
+
     const string &getSymbol() const;
 
     void setSymbol(const string &symbol);
@@ -101,7 +103,6 @@ public:
     const string &getAskNotional() const;
 
     void setAskNotional(const string &askNotional);
-
 
 };
 

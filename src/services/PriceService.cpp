@@ -306,7 +306,6 @@ void *PriceService::init() {
                     sendToRedis("mark_price", msg.get_payload());
                     sendToRedis("mark_price_map", markPrice->getPrices().dump());
                     sendToRedis("account_info", accountInfo->toJSON().dump());
-
                 } catch (exception &ex) {
                     cerr << "Error when send to redis: " << ex.what() << endl;
                 }
