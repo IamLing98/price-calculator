@@ -4,6 +4,11 @@
 #ifndef CALCULATOR_HEADERS_H
 #define CALCULATOR_HEADERS_H
 
-#include "services/PriceService.h"
+#include <iostream>
+#include <thread>
+
+#include "./services/priceService/PriceService.h"
+
+using namespace std;
 
 #endif //CALCULATOR_HEADERS_H

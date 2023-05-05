@@ -2,15 +2,22 @@ cmake_minimum_required(VERSION 3.19)
 
 project(calculator)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(CppKafka REQUIRED)
 
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif ()
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
 add_executable(calculator
         src/main.cpp
-        src/services/PriceService.cpp
-        src/services/PriceService.h
         src/models/accountInfo/AccountInfo.cpp
         src/models/accountInfo/AccountInfo.h
         src/models/markPrice/MarkPrice.cpp
@@ -21,7 +28,18 @@ add_executable(calculator
         src/utils/DataUtils.h
         src/models/position/Position.cpp
         src/models/position/Position.h
-        )
+        src/models/tickerPrice/TickerPrice.cpp
+        src/models/tickerPrice/TickerPrice.h
+        src/services/wsServer/SocketServer.cpp
+        src/services/wsServer/SocketServer.h
+        src/services/wsServer/Session.cpp
+        src/services/wsServer/Session.h
+        src/services/wsPriceStream/PriceWs.cpp
+        src/services/wsPriceStream/PriceWs.h
+        src/utils/logger/Logger.cpp
+        src/utils/logger/Logger.h
+        src/services/priceService/PriceService.cpp
+        src/services/priceService/PriceService.h)
 
 target_link_libraries(calculator CppKafka::cppkafka)
 
