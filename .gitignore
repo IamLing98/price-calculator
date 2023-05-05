@@ -11,3 +11,4 @@ hiredis/
 modern-cpp-kafka/
 rapidjson/
 redis-cpp/
+Testing/
