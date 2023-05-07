@@ -7,6 +7,10 @@ void start() {
     priceService->start();
 }
 
+void wsServerStart(){
+
+}
+
 int main(int argc, char **argv) {
 //    unique_ptr<PriceService> priceService(new PriceService());
     thread priceServiceThread(start);

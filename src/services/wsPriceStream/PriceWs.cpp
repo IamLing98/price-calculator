@@ -124,8 +124,6 @@ void PriceWs::on_handshake(beast::error_code ec) {
             beast::bind_front_handler(
                     &PriceWs::on_read,
                     shared_from_this()));
-
-
 }
 
 void PriceWs::on_write(beast::error_code ec, std::size_t bytes_transferred) {
@@ -158,7 +156,6 @@ void PriceWs::on_read(beast::error_code ec, std::size_t bytes_transferred) {
     std::time_t end_time = std::chrono::system_clock::to_time_t(start);
     cout<<"New message"<<ctime(&end_time)<<endl;
 }
-
 
 void PriceWs::on_close(beast::error_code ec) {
     cout << "On close" << endl;

@@ -55,7 +55,6 @@ void SocketServer::on_accept(beast::error_code ec, tcp::socket socket) {
         // Create the session and run it
         std::make_shared<Session>(std::move(socket))->run();
     }
-
     // Accept another connection
     do_accept();
 }

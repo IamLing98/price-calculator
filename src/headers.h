@@ -8,6 +8,7 @@
 #include <thread>
 
 #include "./services/priceService/PriceService.h"
+#include "./services/wsServer/SocketServer.h"
 
 using namespace std;
 
