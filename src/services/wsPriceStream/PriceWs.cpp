@@ -101,7 +101,7 @@ void PriceWs::on_ssl_handshake(beast::error_code ec) {
             }));
 
     // Perform the websocket handshake
-    ws_.async_handshake(host_, "/ws/!markPrice@arr",
+    ws_.async_handshake(host_, text_,
                         beast::bind_front_handler(
                                 &PriceWs::on_handshake,
                                 shared_from_this()));
@@ -153,8 +153,12 @@ void PriceWs::on_read(beast::error_code ec, std::size_t bytes_transferred) {
 //                        beast::bind_front_handler(
 //                                &session::on_close,
 //                                shared_from_this()));
-    std::cout << beast::make_printable(buffer_.data()) << std::endl;
+//    std::cout << beast::make_printable(buffer_.data()) << std::endl;
+    auto start = std::chrono::system_clock::now();
+    std::time_t end_time = std::chrono::system_clock::to_time_t(start);
+    cout<<"New message"<<ctime(&end_time)<<endl;
 }
+
 
 void PriceWs::on_close(beast::error_code ec) {
     cout << "On close" << endl;

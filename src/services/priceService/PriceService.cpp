@@ -9,7 +9,7 @@ PriceService::PriceService(){}
 int PriceService::start() {
     auto const host = "fstream.binance.com";
     auto const port = "443";
-    auto const text = "/ws/!markPrice@arr";
+    auto const text = "/ws/!markPrice@arr@1s";
 
 // The io_context is required for all I/O
     net::io_context ioc;

@@ -13,10 +13,6 @@ using namespace std;
 #include "../asset/Asset.h"
 #include "../position/Position.h"
 
-#include "rapidjson/document.h"
-#include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
-
 #include <vector>
 
 class AccountInfo {
