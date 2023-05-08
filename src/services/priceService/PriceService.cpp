@@ -4,12 +4,18 @@
 
 #include "PriceService.h"
 
-PriceService::PriceService(){}
+PriceService::PriceService() {}
 
 int PriceService::start() {
     auto const host = "fstream.binance.com";
     auto const port = "443";
     auto const text = "/ws/!markPrice@arr@1s";
+    auto const target = "/ws/!markPrice@arr@1s";
+
+    /*
+     type=1: MARK PRICE
+     */
+    int type = 1;
 
 // The io_context is required for all I/O
     net::io_context ioc;
@@ -21,8 +27,8 @@ int PriceService::start() {
     load_root_certificates(ctx);
 
 // Launch the asynchronous operation
-    std::shared_ptr <PriceWs> p = std::make_shared<PriceWs>(ioc, ctx);
-    p->run(host, port, text);
+    std::shared_ptr<PriceWs> p = std::make_shared<PriceWs>(ioc, ctx);
+    p->run(host, port, text, target, type);
     ioc.run();
 
 // Run the I/O service. The call will return when

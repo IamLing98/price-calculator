@@ -7,12 +7,15 @@
 
 #include "../wsPriceStream/PriceWs.h"
 
+#include "../../utils/logger/Logger.h"
 
-class PriceService {
+class PriceService : public Logger {
 
 public:
     PriceService();
+
     int start();
+
 };
 
 

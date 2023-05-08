@@ -4,7 +4,7 @@
 
 #include "Session.h"
 
- Session::Session(tcp::socket&& socket) : ws_(std::move(socket)) {
+Session::Session(tcp::socket &&socket) : ws_(std::move(socket)) {
 }
 
 
@@ -30,8 +30,9 @@ void Session::on_run() {
             [](websocket::response_type &res) {
                 res.set(http::field::server,
                         std::string(BOOST_BEAST_VERSION_STRING) +
-                        " websocket-server-async");
+                        "websocket-server-async");
             }));
+
     // Accept the websocket handshake
     ws_.async_accept(
             beast::bind_front_handler(

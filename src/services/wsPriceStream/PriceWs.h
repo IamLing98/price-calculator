@@ -19,6 +19,13 @@
 #include <thread>
 #include <chrono>
 #include <ctime>
+#include <vector>
+
+#include "../../models/tickerPrice/TickerPrice.h"
+
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 #include "../../utils/logger/Logger.h"
 
@@ -36,14 +43,17 @@ private:
     tcp::resolver resolver_;
     websocket::stream<
             beast::ssl_stream<beast::tcp_stream>> ws_;
-    beast::flat_buffer buffer_;
     std::string host_;
     std::string text_;
+    std::string target_;
+    int type_;
+    beast::flat_buffer buffer_;
+
 public:
     explicit PriceWs(net::io_context &ioc, ssl::context &ctx);
 
     // Start the asynchronous operation
-    void run(char const *host, char const *port, char const *text);
+    void run(char const *host, char const *port, char const *text, char const *target, int type);
 
     void enable_async_read();
 
@@ -62,6 +72,8 @@ public:
     void on_read(beast::error_code ec, std::size_t bytes_transferred);
 
     void on_close(beast::error_code ec);
+
+    void onMarkPriceMessage(beast::error_code ec, std::size_t bytes_transferred);
 };
 
 

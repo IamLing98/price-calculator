@@ -12,3 +12,5 @@ modern-cpp-kafka/
 rapidjson/
 redis-cpp/
 Testing/
+.env
+config.json

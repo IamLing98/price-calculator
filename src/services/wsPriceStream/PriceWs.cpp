@@ -4,16 +4,54 @@
 
 #include "PriceWs.h"
 
+bool sortByFundingRate(TickerPrice *tickerA, TickerPrice *tickerB) {
+    std::string::size_type sz;
+    float tickerAFoundingRate = std::stof(tickerA->getFundingRate(), &sz);
+    float tickerBFoundingRate = std::stof(tickerB->getFundingRate(), &sz);
+
+    return tickerAFoundingRate < tickerBFoundingRate;
+}
+
+void PriceWs::onMarkPriceMessage(beast::error_code ec, std::size_t bytes_transferred) {
+    cout << "On read mark price message" << endl;
+    boost::ignore_unused(bytes_transferred);
+    if (ec)
+        return fail(ec, "read");
+    string jsonData = boost::beast::buffers_to_string(buffer_.data());
+    json allMarkPrice = json::parse(jsonData);
+    if (allMarkPrice != NULL && allMarkPrice.is_array()) {
+        TickerPrice *tickerPrice;
+        vector<TickerPrice *> markPriceVector;
+        for (int i = 0; i < allMarkPrice.size(); i++) {
+            tickerPrice = new TickerPrice(allMarkPrice[i]);
+            markPriceVector.push_back(tickerPrice);
+        }
+        // using default comparison (operator <):
+        std::sort(markPriceVector.begin(), markPriceVector.end(), sortByFundingRate);
+        for (int i = 0; i < markPriceVector.size(); i++) {
+            tickerPrice = markPriceVector[i];
+            tickerPrice->toString();
+        }
+        for (auto p : markPriceVector) {
+            delete p;
+        }
+        markPriceVector.clear();
+    }
+    std::cout << "On mark price message finished" << std::endl;
+}
+
 // Resolver and socket require an io_context
 PriceWs::PriceWs(net::io_context &ioc, ssl::context &ctx)
         : resolver_(net::make_strand(ioc)), ws_(net::make_strand(ioc), ctx) {
 }
 
 // Start the asynchronous operation
-void PriceWs::run(char const *host, char const *port, char const *text) {
+void PriceWs::run(char const *host, char const *port, char const *text, char const *target, int type) {
     // Save these for later
     host_ = host;
     text_ = text;
+    target_ = target;
+    type_ = type;
 
     // Look up the domain name
     resolver_.async_resolve(host, port, beast::bind_front_handler(
@@ -24,11 +62,23 @@ void PriceWs::run(char const *host, char const *port, char const *text) {
 
 void PriceWs::enable_async_read() {
     buffer_.clear();
-    ws_.async_read(
-            buffer_,
-            beast::bind_front_handler(
-                    &PriceWs::on_read,
-                    shared_from_this()));
+
+    switch (this->type_) {
+        case 1:
+            ws_.async_read(
+                    buffer_,
+                    beast::bind_front_handler(
+                            &PriceWs::onMarkPriceMessage,
+                            shared_from_this()));
+            break;
+        default:
+            ws_.async_read(
+                    buffer_,
+                    beast::bind_front_handler(
+                            &PriceWs::on_read,
+                            shared_from_this()));
+    }
+
 }
 
 bool PriceWs::is_socket_open() {
@@ -101,7 +151,7 @@ void PriceWs::on_ssl_handshake(beast::error_code ec) {
             }));
 
     // Perform the websocket handshake
-    ws_.async_handshake(host_, text_,
+    ws_.async_handshake(host_, target_,
                         beast::bind_front_handler(
                                 &PriceWs::on_handshake,
                                 shared_from_this()));
@@ -151,10 +201,10 @@ void PriceWs::on_read(beast::error_code ec, std::size_t bytes_transferred) {
 //                        beast::bind_front_handler(
 //                                &session::on_close,
 //                                shared_from_this()));
-//    std::cout << beast::make_printable(buffer_.data()) << std::endl;
-    auto start = std::chrono::system_clock::now();
-    std::time_t end_time = std::chrono::system_clock::to_time_t(start);
-    cout<<"New message"<<ctime(&end_time)<<endl;
+    std::cout << beast::make_printable(buffer_.data()) << std::endl;
+//    auto start = std::chrono::system_clock::now();
+//    std::time_t end_time = std::chrono::system_clock::to_time_t(start);
+//    cout<<"New message"<<ctime(&end_time)<<endl;
 }
 
 void PriceWs::on_close(beast::error_code ec) {
