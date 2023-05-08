@@ -7,15 +7,16 @@ void start() {
     priceService->start();
 }
 
-void wsServerStart(){
-
+void wsServerStart() {
+    BinanceService *binanceService = new BinanceService();
+    binanceService->getListenKey();
 }
 
 int main(int argc, char **argv) {
 //    unique_ptr<PriceService> priceService(new PriceService());
     thread priceServiceThread(start);
     thread socketServerThread(wsServerStart);
-    while(true){
+    while (true) {
         this_thread::sleep_for(chrono::milliseconds(10));
     }
 }

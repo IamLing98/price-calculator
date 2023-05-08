@@ -39,7 +39,10 @@ add_executable(calculator
         src/utils/logger/Logger.cpp
         src/utils/logger/Logger.h
         src/services/priceService/PriceService.cpp
-        src/services/priceService/PriceService.h)
+        src/services/priceService/PriceService.h
+        src/services/binanceService/BinanceService.cpp
+        src/services/binanceService/BinanceService.h
+        )
 
 target_link_libraries(calculator CppKafka::cppkafka)
 
@@ -57,3 +60,9 @@ target_include_directories(calculator PUBLIC ${REDIS_PLUS_PLUS_HEADER})
 
 find_library(REDIS_PLUS_PLUS_LIB redis++)
 target_link_libraries(calculator ${REDIS_PLUS_PLUS_LIB})
+
+set(OPENSSL_USE_STATIC_LIBS TRUE)
+find_package(OpenSSL REQUIRED)
+
+add_executable(calculator ${SOURCE_FILES})
+target_link_libraries(calculator OpenSSL::Crypto)

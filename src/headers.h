@@ -10,6 +10,8 @@
 #include "./services/priceService/PriceService.h"
 #include "./services/wsServer/SocketServer.h"
 
+#include "./services/binanceService/BinanceService.h"
+
 using namespace std;
 
 #endif //CALCULATOR_HEADERS_H
