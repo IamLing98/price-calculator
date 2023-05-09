@@ -29,6 +29,10 @@ using json = nlohmann::json;
 
 #include "../../utils/logger/LoggerFailer.h"
 
+#include "../restAPIService/BinanceAPIService.h"
+
+#include "../redisService/RedisService.h"
+
 using namespace std;
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
@@ -48,6 +52,7 @@ private:
     std::string target_;
     int type_;
     beast::flat_buffer buffer_;
+    RedisService *_redisService;
 
 public:
     explicit PriceWs(net::io_context &ioc, ssl::context &ctx);

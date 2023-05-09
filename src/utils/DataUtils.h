@@ -15,11 +15,13 @@ using json = nlohmann::json;
 
 class DataUtils {
 public:
-    const static string baseUrl;
-    const static string serverTimeBaseUrl;
-    const static string apiKey;
-    const static string userDataStreamURL;
-    const static string secret;
+    const static string BASE_URL;
+    const static string SERVER_TIME_BASE_URL;
+    const static string API_KEY;
+    const static string USER_DATA_STREAM_URL;
+    const static string SECRET_KEY;
+    const static string REDIS_URL;
+
 };
 
 

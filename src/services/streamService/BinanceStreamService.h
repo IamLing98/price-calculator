@@ -9,6 +9,8 @@
 
 #include "../../utils/logger/LoggerFailer.h"
 
+
+
 class BinanceStreamService : public LoggerFailer {
 private:
     string _target;

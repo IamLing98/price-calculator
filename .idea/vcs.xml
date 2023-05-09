@@ -6,6 +6,7 @@
     <mapping directory="$PROJECT_DIR$/hiredis" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/hiredis/redis-plus-plus" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modern-cpp-kafka" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/mysql-connector-cpp" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/rapidjson" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/rapidjson/thirdparty/gtest" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/redis-cpp" vcs="Git" />

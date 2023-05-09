@@ -11,10 +11,11 @@ find_package(CppKafka REQUIRED)
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif ()
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -lmysqlcppconn -L/usr/lib64/mysql -lmysqlclient -L/usr/local/lib/ -lmysqlcppconn -lmysqlclient_r")
 
 add_executable(calculator
         src/main.cpp
@@ -43,7 +44,7 @@ add_executable(calculator
         src/services/restAPIService/BinanceAPIService.cpp
         src/services/restAPIService/BinanceAPIService.h
 #        libs/sha256/hmac_sha256.h libs/sha256/hmac_sha256.c libs/sha256/sha256.h libs/sha256/sha256.c
-        )
+        src/services/redisService/RedisService.cpp src/services/redisService/RedisService.h)
 
 target_link_libraries(calculator CppKafka::cppkafka)
 

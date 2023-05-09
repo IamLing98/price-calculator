@@ -34,6 +34,8 @@ public:
     string getAccountInfo(string timeServer, string signature);
 
     string getSignature(string timestamp);
+
+    string getPositionRisk(string serverTime, string signature);
 };
 
 #endif //CALCULATOR_BINANCEAPISERVICE_H

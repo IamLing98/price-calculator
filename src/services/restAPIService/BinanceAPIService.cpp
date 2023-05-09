@@ -12,7 +12,7 @@
 //string secret = config["SECRET_KEY"];
 
 BinanceAPIService::BinanceAPIService() {
-    this->client = new Client(DataUtils::baseUrl);
+    this->client = new Client(DataUtils::BASE_URL);
 }
 
 string encryptWithHMAC(const char *key, const char *data) {
@@ -38,14 +38,14 @@ string encryptWithHMAC(const char *key, const char *data) {
 string BinanceAPIService::getSignature(string serverTime) {
     string query = "timestamp=" + serverTime;
     cout << "Query" << query << endl;
-    string signature = encryptWithHMAC(DataUtils::secret.c_str(), query.c_str());
+    string signature = encryptWithHMAC(DataUtils::SECRET_KEY.c_str(), query.c_str());
     cout << "Signature: " << signature << endl;
     return signature;
 }
 
 Headers getCommonHeader() {
     Headers headers = {
-            {"X-MBX-APIKEY", DataUtils::apiKey},
+            {"X-MBX-APIKEY", DataUtils::API_KEY},
             {"-m",           "3"},
             {"Content-Type", "application/json"}
     };
@@ -53,7 +53,7 @@ Headers getCommonHeader() {
 }
 
 string BinanceAPIService::getListenKey() {
-    this->client = new Client(DataUtils::baseUrl);
+    this->client = new Client(DataUtils::BASE_URL);
     try {
         Headers headers = getCommonHeader();
         auto res = this->client->Post("/fapi/v1/listenKey", headers);
@@ -61,7 +61,6 @@ string BinanceAPIService::getListenKey() {
         delete this->client;
         json json = json::parse(res->body);
         string listenKey = to_string(json["listenKey"]);
-
         return listenKey.substr(1, listenKey.size() - 2);
     } catch (exception &ex) {
         cout << "Get listen key error: " << ex.what() << endl;
@@ -69,7 +68,7 @@ string BinanceAPIService::getListenKey() {
 }
 
 string BinanceAPIService::getServerTime() {
-    this->client = new Client(DataUtils::serverTimeBaseUrl);
+    this->client = new Client(DataUtils::SERVER_TIME_BASE_URL);
     try {
         Headers headers = getCommonHeader();
         auto res = this->client->Get("/api/v3/time", headers);
@@ -83,10 +82,24 @@ string BinanceAPIService::getServerTime() {
 }
 
 string BinanceAPIService::getAccountInfo(string serverTime, string signature) {
-    this->client = new Client(DataUtils::baseUrl);
+    this->client = new Client(DataUtils::BASE_URL);
     try {
         Headers headers = getCommonHeader();
         auto res = this->client->Get("/fapi/v2/account?timestamp=" + serverTime + "&signature=" + signature, headers);
+//        cout << "Body: " << res->body << endl;
+        delete this->client;
+        return res->body;
+    } catch (exception &ex) {
+        cout << "Get time server error: " << ex.what() << endl;
+    }
+}
+
+string BinanceAPIService::getPositionRisk(string serverTime, string signature) {
+    this->client = new Client(DataUtils::BASE_URL);
+    try {
+        Headers headers = getCommonHeader();
+        auto res = this->client->Get("/fapi/v2/positionRisk?timestamp=" + serverTime + "&signature=" + signature,
+                                     headers);
         cout << "Body: " << res->body << endl;
         delete this->client;
         return res->body;

@@ -9,14 +9,16 @@ bool sortByFundingRate(TickerPrice *tickerA, TickerPrice *tickerB) {
     float tickerAFoundingRate = std::stof(tickerA->getFundingRate(), &sz);
     float tickerBFoundingRate = std::stof(tickerB->getFundingRate(), &sz);
 
-    return tickerAFoundingRate < tickerBFoundingRate;
+    return tickerAFoundingRate > tickerBFoundingRate;
 }
 
 void PriceWs::onMarkPriceMessage(beast::error_code ec, std::size_t bytes_transferred) {
     cout << "On read mark price message" << endl;
     boost::ignore_unused(bytes_transferred);
-    if (ec)
-        return fail(ec, "read");
+    if (ec) {
+        cerr << "End of file" << endl;
+    }
+//        return fail(ec, "read");
     string jsonData = boost::beast::buffers_to_string(buffer_.data());
     json allMarkPrice = json::parse(jsonData);
     if (allMarkPrice != NULL && allMarkPrice.is_array()) {
@@ -30,13 +32,22 @@ void PriceWs::onMarkPriceMessage(beast::error_code ec, std::size_t bytes_transfe
         std::sort(markPriceVector.begin(), markPriceVector.end(), sortByFundingRate);
         for (int i = 0; i < markPriceVector.size(); i++) {
             tickerPrice = markPriceVector[i];
-            tickerPrice->toString();
+//            tickerPrice->toString();
         }
         for (auto p : markPriceVector) {
             delete p;
         }
         markPriceVector.clear();
     }
+    BinanceAPIService *binanceService = new BinanceAPIService();
+    string listenKey = this->_redisService->get("LISTEN_KEY");
+    cout << "Listen key" << listenKey << endl;
+    string serverTime = binanceService->getServerTime();
+    string signature = binanceService->getSignature(serverTime);
+    string accountInfo = binanceService->getAccountInfo(serverTime, signature);
+    this->_redisService->set("account_info", accountInfo);
+//    binanceService->getPositionRisk(serverTime, signature);
+    delete binanceService;
     std::cout << "On mark price message finished" << std::endl;
 }
 
@@ -65,12 +76,13 @@ void PriceWs::onUserDataStream(beast::error_code ec, std::size_t bytes_transferr
 //        }
 //        markPriceVector.clear();
 //    }
-    std::cout << "On mark price message finished" << std::endl;
+    std::cout << "On mark price message finished" << boost::beast::buffers_to_string(buffer_.data()) << std::endl;
 }
 
 // Resolver and socket require an io_context
 PriceWs::PriceWs(net::io_context &ioc, ssl::context &ctx)
         : resolver_(net::make_strand(ioc)), ws_(net::make_strand(ioc), ctx) {
+    this->_redisService = new RedisService();
 }
 
 // Start the asynchronous operation
@@ -90,7 +102,6 @@ void PriceWs::run(char const *host, char const *port, char const *text, char con
 
 void PriceWs::enable_async_read() {
     buffer_.clear();
-
     switch (this->type_) {
         case 1:
             ws_.async_read(

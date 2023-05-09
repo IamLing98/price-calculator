@@ -13,6 +13,8 @@
 
 #include "./utils/DataUtils.h"
 
+#include "./services/redisService/RedisService.h"
+
 using namespace std;
 
 #endif //CALCULATOR_HEADERS_H

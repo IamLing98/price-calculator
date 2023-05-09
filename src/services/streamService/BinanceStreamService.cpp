@@ -20,15 +20,7 @@ BinanceStreamService::BinanceStreamService(string host, string port, string targ
 }
 
 int BinanceStreamService::start() {
-    auto const host = "fstream.binance.com";
-    auto const port = "443";
     auto const text = "/ws/!markPrice@arr@1s";
-    auto const target = "/ws/!markPrice@arr@1s";
-
-    /*
-     type=1: MARK PRICE
-     */
-    int type = 1;
 
 // The io_context is required for all I/O
     net::io_context ioc;
@@ -41,7 +33,7 @@ int BinanceStreamService::start() {
 
 // Launch the asynchronous operation
     std::shared_ptr<PriceWs> p = std::make_shared<PriceWs>(ioc, ctx);
-    p->run(this->_host.c_str(), this->_port.c_str(), text, this->_target.c_str(), type);
+    p->run(this->_host.c_str(), this->_port.c_str(), text, this->_target.c_str(), this->_type);
     ioc.run();
 
 // Run the I/O service. The call will return when
