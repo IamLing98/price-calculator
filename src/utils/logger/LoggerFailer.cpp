@@ -2,8 +2,8 @@
 // Created by linhdv on 5/5/23.
 //
 
-#include "Logger.h"
+#include "LoggerFailer.h"
 
-void Logger::fail(beast::error_code ec, char const *what) {
+void LoggerFailer::fail(beast::error_code ec, char const *what) {
     std::cerr << what << ": " << ec.message() << "\n";
 }

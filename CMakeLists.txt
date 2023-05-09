@@ -36,8 +36,8 @@ add_executable(calculator
         src/services/wsServer/Session.h
         src/services/wsPriceStream/PriceWs.cpp
         src/services/wsPriceStream/PriceWs.h
-        src/utils/logger/Logger.cpp
-        src/utils/logger/Logger.h
+        src/utils/logger/LoggerFailer.cpp
+        src/utils/logger/LoggerFailer.h
         src/services/streamService/BinanceStreamService.cpp
         src/services/streamService/BinanceStreamService.h
         src/services/restAPIService/BinanceAPIService.cpp

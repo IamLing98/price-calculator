@@ -40,6 +40,34 @@ void PriceWs::onMarkPriceMessage(beast::error_code ec, std::size_t bytes_transfe
     std::cout << "On mark price message finished" << std::endl;
 }
 
+void PriceWs::onUserDataStream(beast::error_code ec, std::size_t bytes_transferred) {
+    cout << "On read user data info stream's message" << endl;
+    boost::ignore_unused(bytes_transferred);
+    if (ec)
+        return fail(ec, "read");
+//    string jsonData = boost::beast::buffers_to_string(buffer_.data());
+//    json allMarkPrice = json::parse(jsonData);
+//    if (allMarkPrice != NULL && allMarkPrice.is_array()) {
+//        TickerPrice *tickerPrice;
+//        vector<TickerPrice *> markPriceVector;
+//        for (int i = 0; i < allMarkPrice.size(); i++) {
+//            tickerPrice = new TickerPrice(allMarkPrice[i]);
+//            markPriceVector.push_back(tickerPrice);
+//        }
+//        // using default comparison (operator <):
+//        std::sort(markPriceVector.begin(), markPriceVector.end(), sortByFundingRate);
+//        for (int i = 0; i < markPriceVector.size(); i++) {
+//            tickerPrice = markPriceVector[i];
+//            tickerPrice->toString();
+//        }
+//        for (auto p : markPriceVector) {
+//            delete p;
+//        }
+//        markPriceVector.clear();
+//    }
+    std::cout << "On mark price message finished" << std::endl;
+}
+
 // Resolver and socket require an io_context
 PriceWs::PriceWs(net::io_context &ioc, ssl::context &ctx)
         : resolver_(net::make_strand(ioc)), ws_(net::make_strand(ioc), ctx) {
@@ -69,6 +97,13 @@ void PriceWs::enable_async_read() {
                     buffer_,
                     beast::bind_front_handler(
                             &PriceWs::onMarkPriceMessage,
+                            shared_from_this()));
+            break;
+        case 2:
+            ws_.async_read(
+                    buffer_,
+                    beast::bind_front_handler(
+                            &PriceWs::onUserDataStream,
                             shared_from_this()));
             break;
         default:

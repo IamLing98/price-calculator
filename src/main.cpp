@@ -2,6 +2,7 @@
 
 #include "headers.h"
 
+
 void start() {
     BinanceStreamService *priceService = new BinanceStreamService();
 //    streamService->start();
@@ -9,12 +10,15 @@ void start() {
 
 void wsServerStart() {
     BinanceAPIService *binanceService = new BinanceAPIService();
-    binanceService->getListenKey();
+    string listenKey = binanceService->getListenKey();
+    cout << "Listen key" << listenKey << endl;
     string serverTime = binanceService->getServerTime();
     string signature = binanceService->getSignature(serverTime);
-    binanceService->getAccountInfo(serverTime, signature);
-    BinanceStreamService *streamService = new BinanceStreamService();
-    streamService->start();
+//    binanceService->getAccountInfo(serverTime, signature);
+    string target = "/ws?stream=!contractInfo&listenKey=" + listenKey;
+    string host = "fstream-auth.binance.com";
+    BinanceStreamService *userStream = new BinanceStreamService(host, "443", target, 2);
+    userStream->start();
 }
 
 int main(int argc, char **argv) {

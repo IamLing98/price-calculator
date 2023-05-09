@@ -7,9 +7,9 @@
 
 #include "../wsPriceStream/PriceWs.h"
 
-#include "../../utils/logger/Logger.h"
+#include "../../utils/logger/LoggerFailer.h"
 
-class BinanceStreamService : public Logger {
+class BinanceStreamService : public LoggerFailer {
 private:
     string _target;
     string _host;

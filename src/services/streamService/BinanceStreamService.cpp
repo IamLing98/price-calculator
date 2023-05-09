@@ -10,7 +10,13 @@ BinanceStreamService::BinanceStreamService(string host, string port, string targ
     this->_host = host;
     this->_port = port;
     this->_target = target;
+
+    /*
+     1 Mark price
+     2 User data stream
+     */
     this->_type = type;
+    cout << "Create new binance stream service: " << host << ":" << port << target << endl;
 }
 
 int BinanceStreamService::start() {

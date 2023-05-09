@@ -2,8 +2,8 @@
 // Created by linhdv on 5/5/23.
 //
 
-#ifndef CALCULATOR_LOGGER_H
-#define CALCULATOR_LOGGER_H
+#ifndef CALCULATOR_LOGGERFAILER_H
+#define CALCULATOR_LOGGERFAILER_H
 
 #include <iostream>
 #include <boost/beast/core.hpp>
@@ -16,11 +16,11 @@ namespace beast = boost::beast;         // from <boost/beast.hpp>
 //------------------------------------------------------------------------------
 
 
-class Logger {
+class LoggerFailer {
 public:
     static void fail(beast::error_code ec, char const *what);
 
 };
 
 
-#endif //CALCULATOR_LOGGER_H
+#endif //CALCULATOR_LOGGERFAILER_H

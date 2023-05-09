@@ -8,9 +8,10 @@
 #include <thread>
 
 #include "./services/streamService/BinanceStreamService.h"
+#include "./services/restAPIService/BinanceAPIService.h"
 #include "./services/wsServer/SocketServer.h"
 
-#include "./services/restAPIService/BinanceAPIService.h"
+#include "./utils/DataUtils.h"
 
 using namespace std;
 

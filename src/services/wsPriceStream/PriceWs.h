@@ -27,7 +27,7 @@
 
 using json = nlohmann::json;
 
-#include "../../utils/logger/Logger.h"
+#include "../../utils/logger/LoggerFailer.h"
 
 using namespace std;
 
@@ -38,7 +38,7 @@ namespace net = boost::asio;            // from <boost/asio.hpp>
 namespace ssl = boost::asio::ssl;       // from <boost/asio/ssl.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
-class PriceWs : public std::enable_shared_from_this<PriceWs>, Logger {
+class PriceWs : public std::enable_shared_from_this<PriceWs>, LoggerFailer {
 private:
     tcp::resolver resolver_;
     websocket::stream<
@@ -74,6 +74,8 @@ public:
     void on_close(beast::error_code ec);
 
     void onMarkPriceMessage(beast::error_code ec, std::size_t bytes_transferred);
+
+    void onUserDataStream(beast::error_code ec, std::size_t bytes_transferred);
 };
 
 

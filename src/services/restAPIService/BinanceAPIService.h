@@ -8,19 +8,16 @@
 
 #include <iostream>
 #include <string>
-
 #include <openssl/hmac.h>
-
 using namespace std;
 
 #include "nlohmann/json.hpp"
-
 using json = nlohmann::json;
 
 #include "httplib.h"
-
 using namespace httplib;
 
+#include "../../utils/DataUtils.h"
 
 class BinanceAPIService {
 
@@ -38,6 +35,5 @@ public:
 
     string getSignature(string timestamp);
 };
-
 
 #endif //CALCULATOR_BINANCEAPISERVICE_H
