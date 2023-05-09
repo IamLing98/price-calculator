@@ -7,10 +7,10 @@
 #include <iostream>
 #include <thread>
 
-#include "./services/priceService/PriceService.h"
+#include "./services/streamService/BinanceStreamService.h"
 #include "./services/wsServer/SocketServer.h"
 
-#include "./services/binanceService/BinanceService.h"
+#include "./services/restAPIService/BinanceAPIService.h"
 
 using namespace std;
 

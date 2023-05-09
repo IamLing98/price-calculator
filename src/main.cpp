@@ -3,17 +3,22 @@
 #include "headers.h"
 
 void start() {
-    PriceService *priceService = new PriceService();
-    priceService->start();
+    BinanceStreamService *priceService = new BinanceStreamService();
+//    streamService->start();
 }
 
 void wsServerStart() {
-    BinanceService *binanceService = new BinanceService();
+    BinanceAPIService *binanceService = new BinanceAPIService();
     binanceService->getListenKey();
+    string serverTime = binanceService->getServerTime();
+    string signature = binanceService->getSignature(serverTime);
+    binanceService->getAccountInfo(serverTime, signature);
+    BinanceStreamService *streamService = new BinanceStreamService();
+    streamService->start();
 }
 
 int main(int argc, char **argv) {
-//    unique_ptr<PriceService> priceService(new PriceService());
+//    unique_ptr<BinanceStreamService> streamService(new BinanceStreamService());
     thread priceServiceThread(start);
     thread socketServerThread(wsServerStart);
     while (true) {
